@@ -75,7 +75,10 @@ public class RemoteMetaDataImpl extends UnicastRemoteObject implements RemoteMet
       int fldlength = sch.length(fldname);
       if (fldtype == INTEGER)
          return 6;  // accommodate 6-digit integers
-      else
+      else if(fldtype == java.sql.Types.VARCHAR)
          return fldlength;
+      //TODO
+      else
+    	 return 21;
    }
 }

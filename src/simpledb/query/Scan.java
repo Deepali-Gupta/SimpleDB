@@ -40,6 +40,9 @@ public interface Scan {
     */
    public int      getInt(String fldname);
    
+   //TODO
+   public long  getLong(String fldname);
+   
    /**
     * Returns the value of the specified string field 
     * in the current record.

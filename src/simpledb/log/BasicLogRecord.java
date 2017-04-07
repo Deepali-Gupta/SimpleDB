@@ -41,6 +41,13 @@ public class BasicLogRecord {
       return result;
    }
    
+   //TODO
+   public long nextLong() {
+	      long result = pg.getLong(pos);
+	      pos += LONG_SIZE;
+	      return result;
+	   }
+   
    /**
     * Returns the next value of the current log record, 
     * assuming it is a string.

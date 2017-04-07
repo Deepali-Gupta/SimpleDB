@@ -84,6 +84,14 @@ public class ProductScan implements Scan {
          return s2.getInt(fldname);
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      if (s1.hasField(fldname))
+	         return s1.getLong(fldname);
+	      else
+	         return s2.getLong(fldname);
+	   }
+   
    /** 
     * Returns the string value of the specified field.
     * The value is obtained from whichever scan

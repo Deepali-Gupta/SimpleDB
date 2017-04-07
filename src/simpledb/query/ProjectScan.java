@@ -50,6 +50,14 @@ public class ProjectScan implements Scan {
          throw new RuntimeException("field " + fldname + " not found.");
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      if (hasField(fldname))
+	         return s.getLong(fldname);
+	      else
+	         throw new RuntimeException("field " + fldname + " not found.");
+	   }
+   
    public String getString(String fldname) {
       if (hasField(fldname))
          return s.getString(fldname);

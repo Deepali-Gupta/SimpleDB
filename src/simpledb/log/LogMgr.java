@@ -104,8 +104,11 @@ public class LogMgr implements Iterable<BasicLogRecord> {
    private void appendVal(Object val) {
       if (val instanceof String)
          mypage.setString(currentpos, (String)val);
-      else
+      else if (val instanceof Integer)
          mypage.setInt(currentpos, (Integer)val);
+      else
+    //TODO
+    	 mypage.setLong(currentpos, (Long)val);
       currentpos += size(val);
    }
 
@@ -119,8 +122,11 @@ public class LogMgr implements Iterable<BasicLogRecord> {
          String sval = (String) val;
          return STR_SIZE(sval.length());
       }
-      else
+      else if(val instanceof Integer) 
          return INT_SIZE;
+      //TODO
+      else
+    	  return LONG_SIZE;
    }
 
    /**

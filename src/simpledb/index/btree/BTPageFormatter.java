@@ -48,8 +48,11 @@ public class BTPageFormatter implements PageFormatter {
          int offset = ti.offset(fldname);
          if (ti.schema().type(fldname) == INTEGER)
             page.setInt(pos + offset, 0);
-         else
+         else if(ti.schema().type(fldname) == java.sql.Types.VARCHAR)
             page.setString(pos + offset, "");
+         else
+        	 //TODO
+        	 page.setLong(pos + offset, 0);
       }
    }
 }

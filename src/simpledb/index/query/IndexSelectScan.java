@@ -80,6 +80,11 @@ public class IndexSelectScan implements Scan {
       return ts.getInt(fldname);
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      return ts.getLong(fldname);
+	   }
+   
    /**
     * Returns the value of the field of the current data record.
     * @see simpledb.query.Scan#getString(java.lang.String)

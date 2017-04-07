@@ -4,6 +4,7 @@
 package simpledb.query;
 import java.util.*;
 import java.text.*;
+import java.lang.Long;
 /**
  * @author deepali
  *
@@ -12,16 +13,19 @@ public class TimestampConstant implements Constant {
 	private Date val;
 	String pattern = "yyyy-MM-dd HH:mm:ss";
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);   
-	   /**
-	    * Create a constant by wrapping the specified date
-	    * @param n the long value
-	 * @throws ParseException 
-	    */
+	   
 	//handle exception for format checking while input itself
 	//storage as long values
 	//TODO
-	   public TimestampConstant(String n) throws ParseException {
-	      val = simpleDateFormat.parse(n);
+	   public TimestampConstant(String n){
+	      
+			try {
+				val = simpleDateFormat.parse(n);
+				System.out.println("here");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	   }
 	   
 	   /**
@@ -40,14 +44,6 @@ public class TimestampConstant implements Constant {
 	   public int compareTo(Constant c) {
 		   TimestampConstant tc = (TimestampConstant) c;
 	       return val.compareTo(tc.val);
-	   }
-	   
-	   public boolean after(Date d) {
-		   return val.after(d);
-	   }
-	   
-	   public boolean before(Date d) {
-		   return val.before(d);
 	   }
 	   
 	   public int hashCode() {

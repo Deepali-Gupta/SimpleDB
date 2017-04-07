@@ -89,6 +89,11 @@ public class ChunkScan implements Scan {
       return rp.getInt(fldname);
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      return rp.getLong(fldname);
+	   }
+   
    /**
     * @see simpledb.query.Scan#getString(java.lang.String)
     */

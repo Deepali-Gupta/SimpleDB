@@ -104,6 +104,11 @@ public class GroupByScan implements Scan {
       return (Integer)getVal(fldname).asJavaVal();
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      return (Long)getVal(fldname).asJavaVal();
+	   }
+   
    /**
     * Gets the string value of the specified field.
     * If the field is a group field, then its value can

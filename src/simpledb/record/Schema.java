@@ -31,7 +31,7 @@ public class Schema {
     * @param length the conceptual length of a string field.
     */
    public void addField(String fldname, int type, int length) {
-      info.put(fldname, new FieldInfo(type, length));
+	  info.put(fldname, new FieldInfo(type, length));
    }
    
    /**
@@ -53,6 +53,12 @@ public class Schema {
    public void addStringField(String fldname, int length) {
       addField(fldname, VARCHAR, length);
    }
+   
+   //TODO
+   public void addTimestampField(String fldname) {
+	   addField(fldname, DATE, 0);
+	      
+	   }
    
    /**
     * Adds a field to the schema having the same

@@ -1,5 +1,5 @@
 package simpledb.record;
-
+import java.util.*;
 import simpledb.file.Block;
 import simpledb.tx.Transaction;
 
@@ -71,6 +71,12 @@ public class RecordFile {
       return rp.getInt(fldname);
    }
    
+   //TODO
+   
+   public long getLong(String fldname) {
+	      return rp.getLong(fldname);
+	   }
+   
    /**
     * Returns the value of the specified field
     * in the current record.
@@ -100,6 +106,10 @@ public class RecordFile {
    public void setString(String fldname, String val) {
       rp.setString(fldname, val);
    }
+   //TODO
+   public void setLong(String fldname, long val) {
+	      rp.setLong(fldname, val);
+	   }
    
    /**
     * Deletes the current record.

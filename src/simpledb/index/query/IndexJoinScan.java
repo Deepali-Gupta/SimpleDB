@@ -97,6 +97,14 @@ public class IndexJoinScan implements Scan {
          return s.getInt(fldname);
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      if (ts.hasField(fldname))
+	         return ts.getLong(fldname);
+	      else  
+	         return s.getLong(fldname);
+	   }
+   
    /**
     * Returns the string value of the specified field.
     * @see simpledb.query.Scan#getVal(java.lang.String)

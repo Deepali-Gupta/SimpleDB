@@ -69,6 +69,16 @@ public class RecoveryMgr {
       else
          return new SetIntRecord(txnum, blk, offset, oldval).writeToLog();
    }
+   
+   //TODO
+   public int setLong(Buffer buff, int offset, long newval) {
+	      long oldval = buff.getLong(offset);
+	      Block blk = buff.block();
+	      if (isTempBlock(blk))
+	         return -1;
+	      else
+	         return new SetTimestampRecord(txnum, blk, offset, oldval).writeToLog();
+	   }
 
    /**
     * Writes a setstring record to the log, and returns its lsn.

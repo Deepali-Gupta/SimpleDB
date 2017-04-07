@@ -47,6 +47,11 @@ public class Buffer {
    public int getInt(int offset) {
       return contents.getInt(offset);
    }
+   
+   //TODO
+   public long getLong(int offset) {
+	      return contents.getLong(offset);
+	   }
 
    /**
     * Returns the string value at the specified offset of the
@@ -80,6 +85,13 @@ public class Buffer {
 	      logSequenceNumber = lsn;
       contents.setInt(offset, val);
    }
+   
+   public void setLong(int offset, long val, int txnum, int lsn) {
+	      modifiedBy = txnum;
+	      if (lsn >= 0)
+		      logSequenceNumber = lsn;
+	      contents.setLong(offset, val);
+	   }
 
    /**
     * Writes a string to the specified offset of the

@@ -60,6 +60,12 @@ public class RecordPage {
       return tx.getInt(blk, position);
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      int position = fieldpos(fldname);
+	      return tx.getLong(blk, position);
+	   }
+   
    /**
     * Returns the string value stored for the
     * specified field of the current record.
@@ -92,6 +98,11 @@ public class RecordPage {
       int position = fieldpos(fldname);
       tx.setString(blk, position, val);
    }
+   //TODO
+   public void setLong(String fldname, long val) {
+	      int position = fieldpos(fldname);
+	      tx.setLong(blk, position, val);
+	   }
    
    /**
     * Deletes the current record.

@@ -22,10 +22,20 @@ public class Parser {
    }
    
    public Constant constant() {
-      if (lex.matchStringConstant())
-         return new StringConstant(lex.eatStringConstant());
-      else
+	   System.out.println("gadbad1");
+      if (lex.matchTimestampConstant()) {
+    	  System.out.println("gadbad");
+    	  return new TimestampConstant(lex.eatTimestampConstant());
+         
+      }
+      else if(lex.matchIntConstant())
          return new IntConstant(lex.eatIntConstant());
+      //TODO
+      else {
+    	  System.out.println("gadbad2");
+    	  return new StringConstant(lex.eatStringConstant()); 
+    	 
+      }
    }
    
    public Expression expression() {
@@ -208,12 +218,19 @@ public class Parser {
          lex.eatKeyword("int");
          schema.addIntField(fldname);
       }
-      else {
+      else if (lex.matchKeyword("varchar")){
          lex.eatKeyword("varchar");
          lex.eatDelim('(');
          int strLen = lex.eatIntConstant();
          lex.eatDelim(')');
          schema.addStringField(fldname, strLen);
+      }
+      //TODO
+      else {
+    	  lex.eatKeyword("timestamp");
+    	  System.out.println("heretoo");
+    	  schema.addTimestampField(fldname);
+    	  
       }
       return schema;
    }

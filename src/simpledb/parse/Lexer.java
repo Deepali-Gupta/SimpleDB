@@ -50,6 +50,10 @@ public class Lexer {
    public boolean matchStringConstant() {
       return '\'' == (char)tok.ttype;
    }
+   //TODO
+   public boolean matchTimestampConstant() {
+	   return '\'' == (char)tok.ttype;
+	   }
    
    /**
     * Returns true if the current token is the specified keyword.
@@ -109,6 +113,14 @@ public class Lexer {
       nextToken();
       return s;
    }
+   //TODO
+   public String eatTimestampConstant() {
+	      if (!matchTimestampConstant())
+	         throw new BadSyntaxException();
+	      String s = tok.sval; //constants are not converted to lower case
+	      nextToken();
+	      return s;
+	   }
    
    /**
     * Throws an exception if the current token is not the
@@ -145,10 +157,11 @@ public class Lexer {
          throw new BadSyntaxException();
       }
    }
-   
+   //TODO
    private void initKeywords() {
       keywords = Arrays.asList("select", "from", "where", "and",
                                "insert", "into", "values", "delete", "update", "set", 
-                               "create", "table", "int", "varchar", "view", "as", "index", "on");
+                               "create", "table", "int", "varchar", "view", "as", "index", "on",
+                               "timestamp", "between");
    }
 }

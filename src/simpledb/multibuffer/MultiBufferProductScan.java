@@ -85,6 +85,11 @@ public class MultiBufferProductScan implements Scan {
       return prodscan.getInt(fldname);
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      return prodscan.getLong(fldname);
+	   }
+   
    /** 
     * Returns the string value of the specified field.
     * The value is obtained from whichever scan

@@ -1,13 +1,13 @@
 package simpledb.index.btree;
-
+import java.text.SimpleDateFormat;
 import static java.sql.Types.INTEGER;
 import static simpledb.file.Page.*;
 import simpledb.file.Block;
 import simpledb.record.*;
 import simpledb.query.*;
 import simpledb.tx.Transaction;
-
-/**
+import java.util.*
+;/**
  * B-tree directory and leaf pages have many commonalities:
  * in particular, their records are stored in sorted order, 
  * and pages split when full.
@@ -191,6 +191,12 @@ public class BTreePage {
       return tx.getInt(currentblk, pos);
    }
    
+   //TODO
+   private long getLong(int slot, String fldname) {
+	      int pos = fldpos(slot, fldname);
+	      return tx.getLong(currentblk, pos);
+	   }
+   
    private String getString(int slot, String fldname) {
       int pos = fldpos(slot, fldname);
       return tx.getString(currentblk, pos);
@@ -200,14 +206,27 @@ public class BTreePage {
       int type = ti.schema().type(fldname);
       if (type == INTEGER)
          return new IntConstant(getInt(slot, fldname));
-      else
+      else if(type == java.sql.Types.VARCHAR)
          return new StringConstant(getString(slot, fldname));
+      //TODO
+      else {
+    	 Date date = new Date(getLong(slot,fldname));
+    	 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	 String n = df.format(date);
+    	 return new TimestampConstant(n);
+      }
    }
    
    private void setInt(int slot, String fldname, int val) {
       int pos = fldpos(slot, fldname);
       tx.setInt(currentblk, pos, val);
    }
+   
+   //TODO
+   private void setLong(int slot, String fldname, long val) {
+	      int pos = fldpos(slot, fldname);
+	      tx.setLong(currentblk, pos, val);
+	   }
    
    private void setString(int slot, String fldname, String val) {
       int pos = fldpos(slot, fldname);
@@ -218,8 +237,13 @@ public class BTreePage {
       int type = ti.schema().type(fldname);
       if (type == INTEGER)
          setInt(slot, fldname, (Integer)val.asJavaVal());
-      else
+      else if(type == java.sql.Types.VARCHAR)
          setString(slot, fldname, (String)val.asJavaVal());
+      //TODO
+      else {
+    	  Date date = (Date)val.asJavaVal();
+    	 setLong(slot, fldname, (Long)date.getTime());
+      }
    }
    
    private void setNumRecs(int n) {

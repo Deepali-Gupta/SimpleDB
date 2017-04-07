@@ -56,6 +56,11 @@ public class SelectScan implements UpdateScan {
       return s.getInt(fldname);
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      return s.getLong(fldname);
+	   }
+   
    public String getString(String fldname) {
       return s.getString(fldname);
    }
@@ -75,6 +80,12 @@ public class SelectScan implements UpdateScan {
       UpdateScan us = (UpdateScan) s;
       us.setInt(fldname, val);
    }
+   
+   //TODO
+   public void setLong(String fldname, long val) {
+	      UpdateScan us = (UpdateScan) s;
+	      us.setLong(fldname, val);
+	   }
    
    public void setString(String fldname, String val) {
       UpdateScan us = (UpdateScan) s;

@@ -1,8 +1,13 @@
 package simpledb.query;
 
 import static java.sql.Types.INTEGER;
+import static java.sql.Types.VARCHAR;
+
+import java.text.SimpleDateFormat;
+
 import simpledb.tx.Transaction;
 import simpledb.record.*;
+import java.util.*;
 
 /**
  * The Scan class corresponding to a table.
@@ -51,13 +56,26 @@ public class TableScan implements UpdateScan {
    public Constant getVal(String fldname) {
       if (sch.type(fldname) == INTEGER)
          return new IntConstant(rf.getInt(fldname));
-      else
+      else if(sch.type(fldname) == VARCHAR)
          return new StringConstant(rf.getString(fldname));
+      //TODO
+      else {
+    	 Date date = new Date(rf.getLong(fldname));
+    	 String pattern = "yyyy-MM-dd HH:mm:ss";
+    	 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    	 String n = simpleDateFormat.format(date);
+    	 return new TimestampConstant(n);
+      }
    }
    
    public int getInt(String fldname) {
       return rf.getInt(fldname);
    }
+   
+   //TODO
+   public long getLong(String fldname) {
+	      return rf.getLong(fldname);
+	   }
    
    public String getString(String fldname) {
       return rf.getString(fldname);
@@ -79,17 +97,26 @@ public class TableScan implements UpdateScan {
    public void setVal(String fldname, Constant val) {
       if (sch.type(fldname) == INTEGER)
          rf.setInt(fldname, (Integer)val.asJavaVal());
-      else
+      else if(sch.type(fldname) == VARCHAR)
          rf.setString(fldname, (String)val.asJavaVal());
+      //TODO
+      else 
+    	  rf.setLong(fldname, ((Date)val.asJavaVal()).getTime());
    }
    
    public void setInt(String fldname, int val) {
       rf.setInt(fldname, val);
    }
    
+   //TODO
+   public void setLong(String fldname, long val) {
+	      rf.setLong(fldname, val);
+	   }
+   
    public void setString(String fldname, String val) {
       rf.setString(fldname, val);
    }
+   
    
    public void delete() {
       rf.delete();

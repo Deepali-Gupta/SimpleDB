@@ -51,6 +51,9 @@ public class Page {
     */
    public static final int INT_SIZE = Integer.SIZE / Byte.SIZE;
    
+   //TODO
+   public static final int LONG_SIZE = Long.SIZE / Byte.SIZE;
+   
    /**
     * The maximum size, in bytes, of a string of length n.
     * A string is represented as the encoding of its characters,
@@ -120,6 +123,12 @@ public class Page {
       return contents.getInt();
    }
    
+   //TODO
+   public synchronized long getLong(int offset) {
+	      contents.position(offset);
+	      return contents.getLong();
+	   }
+   
    /**
     * Writes an integer to the specified offset on the page.
     * @param offset the byte offset within the page
@@ -129,6 +138,12 @@ public class Page {
       contents.position(offset);
       contents.putInt(val);
    }
+   
+   //TODO
+   public synchronized void setLong(int offset, long val) {
+	      contents.position(offset);
+	      contents.putLong(val);
+	   }
    
    /**
     * Returns the string value at the specified offset of the page.

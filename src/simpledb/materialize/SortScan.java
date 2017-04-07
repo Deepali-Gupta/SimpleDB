@@ -110,6 +110,11 @@ public class SortScan implements Scan {
       return currentscan.getInt(fldname);
    }
    
+   //TODO
+   public long getLong(String fldname) {
+	      return currentscan.getLong(fldname);
+	   }
+   
    /**
     * Gets the string value of the specified field
     * of the current scan.
