@@ -79,6 +79,6 @@ public class RemoteMetaDataImpl extends UnicastRemoteObject implements RemoteMet
          return fldlength;
       //TODO
       else
-    	 return 21;
+    	 return 40;
    }
 }
