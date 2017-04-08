@@ -22,9 +22,7 @@ public class Parser {
    }
    
    public Constant constant() {
-	   System.out.println("gadbad1");
-      if (lex.matchTimestampConstant()) {
-    	  System.out.println("gadbad");
+	  if (lex.matchTimestampConstant()) {
     	  return new TimestampConstant(lex.eatTimestampConstant());
          
       }
@@ -32,7 +30,6 @@ public class Parser {
          return new IntConstant(lex.eatIntConstant());
       //TODO
       else {
-    	  System.out.println("gadbad2");
     	  return new StringConstant(lex.eatStringConstant()); 
     	 
       }
@@ -228,7 +225,6 @@ public class Parser {
       //TODO
       else {
     	  lex.eatKeyword("timestamp");
-    	  System.out.println("heretoo");
     	  schema.addTimestampField(fldname);
     	  
       }

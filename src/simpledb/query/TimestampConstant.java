@@ -13,7 +13,7 @@ public class TimestampConstant implements Constant {
 	private Date val;
 	String pattern = "yyyy-MM-dd HH:mm:ss";
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);   
-	   
+	
 	//handle exception for format checking while input itself
 	//storage as long values
 	//TODO
@@ -21,7 +21,7 @@ public class TimestampConstant implements Constant {
 	      
 			try {
 				val = simpleDateFormat.parse(n);
-				System.out.println("here");
+				
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

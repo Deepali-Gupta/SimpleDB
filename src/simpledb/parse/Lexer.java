@@ -1,5 +1,6 @@
 package simpledb.parse;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.*;
 
@@ -52,7 +53,18 @@ public class Lexer {
    }
    //TODO
    public boolean matchTimestampConstant() {
-	   return '\'' == (char)tok.ttype;
+	   if('\'' != (char)tok.ttype)
+		   return false;
+	   String s = tok.sval;
+	   SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	   Date date;
+	   try {
+		date = df.parse(s);
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		return false;
+	}
+	   return true;
 	   }
    
    /**

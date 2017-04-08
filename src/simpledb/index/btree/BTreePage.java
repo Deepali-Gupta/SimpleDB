@@ -206,15 +206,16 @@ public class BTreePage {
       int type = ti.schema().type(fldname);
       if (type == INTEGER)
          return new IntConstant(getInt(slot, fldname));
-      else if(type == java.sql.Types.VARCHAR)
-         return new StringConstant(getString(slot, fldname));
+      else if(type == java.sql.Types.DATE) {
+     	 Date date = new Date(getLong(slot,fldname));
+     	 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+     	 String n = df.format(date);
+     	 return new TimestampConstant(n);
+       }
+         
       //TODO
-      else {
-    	 Date date = new Date(getLong(slot,fldname));
-    	 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    	 String n = df.format(date);
-    	 return new TimestampConstant(n);
-      }
+      else
+    	  return new StringConstant(getString(slot, fldname));
    }
    
    private void setInt(int slot, String fldname, int val) {
@@ -235,15 +236,17 @@ public class BTreePage {
    
    private void setVal(int slot, String fldname, Constant val) {
       int type = ti.schema().type(fldname);
+      System.out.println(type);
       if (type == INTEGER)
          setInt(slot, fldname, (Integer)val.asJavaVal());
-      else if(type == java.sql.Types.VARCHAR)
-         setString(slot, fldname, (String)val.asJavaVal());
-      //TODO
-      else {
+      else if(type == java.sql.Types.DATE) {
     	  Date date = (Date)val.asJavaVal();
     	 setLong(slot, fldname, (Long)date.getTime());
       }
+         
+      //TODO
+      else
+    	  setString(slot, fldname, (String)val.asJavaVal());
    }
    
    private void setNumRecs(int n) {

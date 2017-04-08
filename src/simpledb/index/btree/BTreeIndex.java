@@ -49,10 +49,13 @@ public class BTreeIndex implements Index {
       if (page.getNumRecs() == 0) {
 			// insert initial directory entry
          int fldtype = dirsch.type("dataval");
-         Constant minval = (fldtype == INTEGER) ?
-            new IntConstant(Integer.MIN_VALUE) : ((fldtype == VARCHAR) ?
-            new StringConstant("") :
-            new TimestampConstant("1970-01-01 00:00:00"));
+         Constant minval;
+         if (fldtype == INTEGER)
+        	minval = new IntConstant(Integer.MIN_VALUE);
+         else if (fldtype == VARCHAR)
+        	minval = new StringConstant("");
+         else
+            minval = new TimestampConstant("1970-01-01 00:00:00");
             //TODO
          page.insertDir(0, minval, 0);
 		}
