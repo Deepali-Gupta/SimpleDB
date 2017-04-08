@@ -107,10 +107,13 @@ public class IndexInfo {
       sch.addIntField("id");
       if (ti.schema().type(fldname) == INTEGER)
          sch.addIntField("dataval");
-      else {
+      else if (ti.schema().type(fldname) == java.sql.Types.VARCHAR){
          int fldlen = ti.schema().length(fldname);
          sch.addStringField("dataval", fldlen);
       }
+      else
+    	 sch.addTimestampField("dataval");
+        	 
       return sch;
    }
 }
