@@ -111,6 +111,7 @@ public class IndexInfo {
          int fldlen = ti.schema().length(fldname);
          sch.addStringField("dataval", fldlen);
       }
+      //TODO
       else
     	 sch.addTimestampField("dataval");
         	 

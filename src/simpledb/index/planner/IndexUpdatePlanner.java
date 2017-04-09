@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import simpledb.record.RID;
+import simpledb.record.RecordFile;
 import simpledb.server.SimpleDB;
 import simpledb.tx.Transaction;
 import simpledb.index.Index;
@@ -23,7 +24,14 @@ public class IndexUpdatePlanner implements UpdatePlanner {
    public int executeInsert(InsertData data, Transaction tx) {
       String tblname = data.tableName();
       Plan p = new TablePlan(tblname, tx);
-      
+      //TODO
+      int nrec = p.recordsOutput();
+      System.out.println(nrec);
+      if (nrec >= 100000) {
+    	  System.out.println("MemoryError");
+    	  throw new MemoryError();
+      }
+    	  
       // first, insert the record
       UpdateScan s = (UpdateScan) p.open();
       s.insert();
@@ -35,7 +43,6 @@ public class IndexUpdatePlanner implements UpdatePlanner {
       for (String fldname : data.fields()) {
          Constant val = valIter.next();
          System.out.println("Modify field " + fldname + " to val " + val);
-         System.out.println("setVal called");
          s.setVal(fldname, val);
          
          IndexInfo ii = indexes.get(fldname);

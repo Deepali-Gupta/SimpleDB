@@ -64,6 +64,15 @@ public class Lexer {
 		// TODO Auto-generated catch block
 		return false;
 	}
+	   df.setLenient(false);
+	   try {
+			date = df.parse(s);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			System.out.println("InvalidDateFormatError");
+			throw new InvalidDateFormatError();
+			
+		}
 	   return true;
 	   }
    
@@ -83,6 +92,7 @@ public class Lexer {
    public boolean matchId() {
       return  tok.ttype==StreamTokenizer.TT_WORD && !keywords.contains(tok.sval);
    }
+   
    
 //Methods to "eat" the current token
    

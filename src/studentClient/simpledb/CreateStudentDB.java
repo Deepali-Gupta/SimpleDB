@@ -25,9 +25,11 @@ public class CreateStudentDB {
 								 "(7, 'art', 30, 2004)",
 								 "(8, 'pat', 20, 2001)",
 								 "(9, 'lee', 10, 2004)"};
+			for (int j=0; j<100000;j++) {
 			for (int i=0; i<studvals.length; i++)
 				stmt.executeUpdate(s + studvals[i]);
 			System.out.println("STUDENT records inserted.");
+			}
 
 			s = "create table DEPT(DId int, DName varchar(8))";
 			stmt.executeUpdate(s);
