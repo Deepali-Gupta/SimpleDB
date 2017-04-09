@@ -62,6 +62,13 @@ public class HashIndex implements Index {
 				return true;
 		return false;
 	}
+	
+	public boolean nextbetween() {
+		while (ts.next())
+			if (ts.getVal("dataval").equals(searchkey))
+				return true;
+		return false;
+	}
 
 	/**
 	 * Retrieves the dataRID from the current record

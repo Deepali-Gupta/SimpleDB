@@ -24,6 +24,7 @@ public interface Index {
     * @return false if no other index records have the search key.
     */
    public boolean next();
+   public boolean nextbetween();
    
    /**
     * Returns the dataRID value stored in the current index record. 

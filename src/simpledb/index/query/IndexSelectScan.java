@@ -55,6 +55,15 @@ public class IndexSelectScan implements Scan {
       return ok;
    }
    
+   public boolean nextbetween() {
+	      boolean ok = idx.nextbetween();
+	      if (ok) {
+	         RID rid = idx.getDataRid();
+	         ts.moveToRid(rid);
+	      }
+	      return ok;
+	   }
+   
    /**
     * Closes the scan by closing the index and the tablescan.
     * @see simpledb.query.Scan#close()

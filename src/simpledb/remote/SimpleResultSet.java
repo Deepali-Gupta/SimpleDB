@@ -34,9 +34,9 @@ public class SimpleResultSet extends ResultSetAdapter {
    }
    
    //TODO
-   public long getLong(String fldname) throws SQLException {
+   public Date getDate(String fldname) throws SQLException {
 	      try {
-	         return rrs.getLong(fldname);
+	         return (Date) rrs.getDate(fldname);
 	      }
 	      catch (Exception e) {
 	         throw new SQLException(e);

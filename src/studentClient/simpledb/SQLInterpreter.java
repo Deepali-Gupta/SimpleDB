@@ -74,7 +74,7 @@ public class SQLInterpreter {
 						System.out.format(fmt + "s", rs.getString(fldname));
 					//TODO
 					else {
-						Date date = new Date(rs.getLong(fldname));
+						Date date = rs.getDate(fldname);
 						SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						String n = df.format(date);
 						System.out.format(fmt + "s", n);

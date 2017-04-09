@@ -25,9 +25,13 @@ public class IndexUpdatePlanner implements UpdatePlanner {
       String tblname = data.tableName();
       Plan p = new TablePlan(tblname, tx);
       //TODO
-      int nrec = p.recordsOutput();
-      System.out.println(nrec);
-      if (nrec >= 100000) {
+      RecordFile recfile = new RecordFile(SimpleDB.mdMgr().getTableInfo(data.tableName(), tx),tx);
+      recfile.beforeFirst();
+      int nrecs=0;
+      while(recfile.next())
+    	  nrecs++;
+      System.out.println(nrecs);
+      if (nrecs >= 100000) {
     	  System.out.println("MemoryError");
     	  throw new MemoryError();
       }

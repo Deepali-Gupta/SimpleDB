@@ -90,6 +90,10 @@ public class BTreeIndex implements Index {
    public boolean next() {
       return leaf.next();
    }
+   
+   public boolean nextbetween() {
+	      return leaf.nextbetween();
+   }
 
    /**
     * Returns the dataRID value from the current leaf record.

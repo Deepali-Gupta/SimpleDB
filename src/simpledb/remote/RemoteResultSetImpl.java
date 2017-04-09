@@ -4,6 +4,7 @@ import simpledb.record.Schema;
 import simpledb.query.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.Date;
 
 /**
  * The RMI server-side implementation of RemoteResultSet.
@@ -60,10 +61,10 @@ class RemoteResultSetImpl extends UnicastRemoteObject implements RemoteResultSet
    }
    
    //TODO
-   public long getLong(String fldname) throws RemoteException {
+   public Date getDate(String fldname) throws RemoteException {
 		try {
 	      fldname = fldname.toLowerCase(); // to ensure case-insensitivity
-	      return s.getLong(fldname);
+	      return new Date(s.getLong(fldname));
      }
      catch(RuntimeException e) {
         rconn.rollback();

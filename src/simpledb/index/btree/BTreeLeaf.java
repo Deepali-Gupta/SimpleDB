@@ -15,6 +15,7 @@ public class BTreeLeaf {
    private Constant searchkey;
    private BTreePage contents;
    private int currentslot;
+   private Constant highkey;
    
    /**
     * Opens a page to hold the specified leaf block.
@@ -32,6 +33,15 @@ public class BTreeLeaf {
       contents = new BTreePage(blk, ti, tx);
       currentslot = contents.findSlotBefore(searchkey);
    }
+   
+   public BTreeLeaf(Block blk, TableInfo ti, Constant searchkey, Constant highkey, Transaction tx) {
+	      this.ti = ti;
+	      this.tx = tx;
+	      this.searchkey = searchkey;
+	      this.highkey = highkey;
+	      contents = new BTreePage(blk, ti, tx);
+	      currentslot = contents.findSlotBefore(searchkey);
+	   }
    
    /**
     * Closes the leaf page.
@@ -55,6 +65,17 @@ public class BTreeLeaf {
       else 
          return tryOverflow();
    }
+   
+   public boolean nextbetween() {
+	      currentslot++;
+	      if (currentslot >= contents.getNumRecs()) 
+	         return tryOverflow();
+	      else if (contents.getDataVal(currentslot).compareTo(searchkey)>=0 
+	    		  && contents.getDataVal(currentslot).compareTo(highkey)<=0)
+	         return true;
+	      else 
+	         return tryOverflow();
+	   }
    
    /**
     * Returns the dataRID value of the current leaf record.
