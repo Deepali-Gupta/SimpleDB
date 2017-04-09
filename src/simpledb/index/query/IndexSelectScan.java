@@ -60,7 +60,11 @@ public class IndexSelectScan implements Scan {
     * @see simpledb.query.Scan#next()
     */
    public boolean next() {
-      boolean ok = idx.next();
+	  boolean ok;
+      if(highval==null)
+    	  ok = idx.next();
+      else
+    	  ok = idx.nextbetween();
       if (ok) {
          RID rid = idx.getDataRid();
          ts.moveToRid(rid);
