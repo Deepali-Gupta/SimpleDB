@@ -72,6 +72,7 @@ public class BTreeIndex implements Index {
     * and getDataRid.
     * @see simpledb.index.Index#beforeFirst(simpledb.query.Constant)
     */
+   //TODO
    public void beforeFirst(Constant searchkey) {
       close();
       BTreeDir root = new BTreeDir(rootblk, dirTi, tx);
@@ -80,6 +81,15 @@ public class BTreeIndex implements Index {
       Block leafblk = new Block(leafTi.fileName(), blknum);
       leaf = new BTreeLeaf(leafblk, leafTi, searchkey, tx);
    }
+   
+   public void beforeFirst(Constant lowkey, Constant highkey) {
+	      close();
+	      BTreeDir root = new BTreeDir(rootblk, dirTi, tx);
+	      int blknum = root.search(lowkey);
+	      root.close();
+	      Block leafblk = new Block(leafTi.fileName(), blknum);
+	      leaf = new BTreeLeaf(leafblk, leafTi, lowkey, highkey, tx);
+	   }
 
    /**
     * Moves to the next leaf record having the

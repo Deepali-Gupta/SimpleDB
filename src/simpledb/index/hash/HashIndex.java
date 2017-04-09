@@ -48,6 +48,9 @@ public class HashIndex implements Index {
 		TableInfo ti = new TableInfo(tblname, sch);
 		ts = new TableScan(ti, tx);
 	}
+	public void beforeFirst(Constant lowkey, Constant highkey) {
+		System.out.println("hd hagga");
+	}
 
 	/**
 	 * Moves to the next record having the search key.

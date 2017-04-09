@@ -108,9 +108,9 @@ public class Predicate {
     * @param fldname the name of the field
     * @return either the constant or null
     */
-   public Constant equatesWithConstant(String fldname) {
+   public Constant equatesWithConstant(String fldname, int check) {
       for (Term t : terms) {
-         Constant c = t.equatesWithConstant(fldname);
+         Constant c = t.equatesWithConstant(fldname, check);
          if (c != null)
             return c;
       }

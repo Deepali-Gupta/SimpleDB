@@ -54,7 +54,7 @@ public class TableScan implements UpdateScan {
     * @see simpledb.query.Scan#getVal(java.lang.String)
     */
    public Constant getVal(String fldname) {
-	   System.out.println(sch.type(fldname));
+//	   System.out.println(sch.type(fldname));
       if (sch.type(fldname) == INTEGER)
          return new IntConstant(rf.getInt(fldname));
       else if(sch.type(fldname) == VARCHAR)

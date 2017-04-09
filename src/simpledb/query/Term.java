@@ -70,17 +70,26 @@ public class Term {
     * @param fldname the name of the field
     * @return either the constant or null
     */
-   public Constant equatesWithConstant(String fldname) {
-      if (lhs.isFieldName() &&
-          lhs.asFieldName().equals(fldname) &&
-          rhs.isConstant())
-         return rhs.asConstant();
-      else if (rhs.isFieldName() &&
-               rhs.asFieldName().equals(fldname) &&
-               lhs.isConstant())
-         return lhs.asConstant();
-      else
-         return null;
+   public Constant equatesWithConstant(String fldname, int check) {
+       if(isEquality) {
+		   if (lhs.isFieldName() &&
+	          lhs.asFieldName().equals(fldname) &&
+	          rhs.isConstant())
+	         return rhs.asConstant();
+	      else if (rhs.isFieldName() &&
+	               rhs.asFieldName().equals(fldname) &&
+	               lhs.isConstant())
+	         return lhs.asConstant();
+	      else
+	         return null;
+      }
+       else {
+    	   if(check == 1)
+    		   return low.asConstant();
+    	   else
+    		   return high.asConstant();
+    	   //TODO
+       }
    }
    
    /**

@@ -13,7 +13,7 @@ import simpledb.index.Index;
 public class IndexSelectPlan implements Plan {
    private Plan p;
    private IndexInfo ii;
-   private Constant val;
+   private Constant val,highval;
    
    /**
     * Creates a new indexselect node in the query tree
@@ -28,6 +28,13 @@ public class IndexSelectPlan implements Plan {
       this.ii = ii;
       this.val = val;
    }
+   //TODO
+   public IndexSelectPlan(Plan p, IndexInfo ii, Constant lowval, Constant highval, Transaction tx) {
+	      this.p = p;
+	      this.ii = ii;
+	      this.val = lowval;
+	      this.highval = highval;
+	   }
    
    /** 
     * Creates a new indexselect scan for this query
@@ -37,7 +44,11 @@ public class IndexSelectPlan implements Plan {
       // throws an exception if p is not a tableplan.
       TableScan ts = (TableScan) p.open();
       Index idx = ii.open();
-      return new IndexSelectScan(idx, val, ts);
+      if(highval == null){
+    	  return new IndexSelectScan(idx, val, ts);
+      }
+      return new IndexSelectScan(idx, val, highval, ts);
+      //TODO
    }
    
    /**

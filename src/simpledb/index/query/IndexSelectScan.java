@@ -12,6 +12,7 @@ import simpledb.index.Index;
 public class IndexSelectScan implements Scan {
    private Index idx;
    private Constant val;
+   private Constant highval;
    private TableScan ts;
    
    /**
@@ -27,6 +28,14 @@ public class IndexSelectScan implements Scan {
       beforeFirst();
    }
    
+   public IndexSelectScan(Index idx, Constant lowval, Constant highval, TableScan ts) {
+	      this.idx = idx;
+	      this.val = lowval;
+	      this.highval = highval;
+	      this.ts  = ts;
+	      beforeFirstbet();
+	   }
+   
    /**
     * Positions the scan before the first record,
     * which in this case means positioning the index
@@ -36,6 +45,10 @@ public class IndexSelectScan implements Scan {
    public void beforeFirst() {
       idx.beforeFirst(val);
    }
+   
+   public void beforeFirstbet() {
+	      idx.beforeFirst(val,highval);
+	   }
    
    /**
     * Moves to the next record, which in this case means

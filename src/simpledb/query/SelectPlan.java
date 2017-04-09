@@ -60,7 +60,7 @@ public class SelectPlan implements Plan {
     * @see simpledb.query.Plan#distinctValues(java.lang.String)
     */
    public int distinctValues(String fldname) {
-      if (pred.equatesWithConstant(fldname) != null)
+      if (pred.equatesWithConstant(fldname,1) != null)
          return 1;
       else {
          String fldname2 = pred.equatesWithField(fldname);

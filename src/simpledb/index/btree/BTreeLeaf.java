@@ -34,10 +34,10 @@ public class BTreeLeaf {
       currentslot = contents.findSlotBefore(searchkey);
    }
    
-   public BTreeLeaf(Block blk, TableInfo ti, Constant searchkey, Constant highkey, Transaction tx) {
+   public BTreeLeaf(Block blk, TableInfo ti, Constant lowkey, Constant highkey, Transaction tx) {
 	      this.ti = ti;
 	      this.tx = tx;
-	      this.searchkey = searchkey;
+	      this.searchkey = lowkey;
 	      this.highkey = highkey;
 	      contents = new BTreePage(blk, ti, tx);
 	      currentslot = contents.findSlotBefore(searchkey);
