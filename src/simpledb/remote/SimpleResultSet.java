@@ -1,6 +1,8 @@
 package simpledb.remote;
 
-import java.sql.*;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * An adapter class that wraps RemoteResultSet.
@@ -34,9 +36,9 @@ public class SimpleResultSet extends ResultSetAdapter {
    }
    
    //TODO
-   public Date getDate(String fldname) throws SQLException {
+   public Date getTimestampP2(String fldname) throws SQLException {
 	      try {
-	         return (Date) rrs.getDate(fldname);
+	         return rrs.getTimestampP2(fldname);
 	      }
 	      catch (Exception e) {
 	         throw new SQLException(e);

@@ -69,12 +69,12 @@ public class BTreeLeaf {
    public boolean nextbetween() {
 	      currentslot++;
 	      if (currentslot >= contents.getNumRecs()) 
-	         return tryOverflow();
+	         return tryOverflow2();
 	      else if (contents.getDataVal(currentslot).compareTo(searchkey)>=0 
 	    		  && contents.getDataVal(currentslot).compareTo(highkey)<=0)
 	         return true;
 	      else 
-	         return tryOverflow();
+	         return tryOverflow2();
 	   }
    
    /**
@@ -167,4 +167,17 @@ public class BTreeLeaf {
       currentslot = 0;
       return true;
    }
+   
+   private boolean tryOverflow2() {
+	      Constant firstkey = contents.getDataVal(0);
+	      int flag = contents.getFlag();
+	      if (!(firstkey.compareTo(searchkey)>=0 
+	    		  && firstkey.compareTo(highkey)<=0) || flag < 0)
+	         return false;
+	      contents.close();
+	      Block nextblk = new Block(ti.fileName(), flag);
+	      contents = new BTreePage(nextblk, ti, tx);
+	      currentslot = 0;
+	      return true;
+	   }
 }
