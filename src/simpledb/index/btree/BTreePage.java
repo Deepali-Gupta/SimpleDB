@@ -236,7 +236,6 @@ public class BTreePage {
    
    private void setVal(int slot, String fldname, Constant val) {
       int type = ti.schema().type(fldname);
-      System.out.println(type);
       if (type == INTEGER)
          setInt(slot, fldname, (Integer)val.asJavaVal());
       else if(type == java.sql.Types.DATE) {
