@@ -8,7 +8,8 @@ import simpledb.record.Schema;
  *
  */
 public class Term {
-   private Expression lhs, rhs;
+   private Expression lhs, rhs, low , high;
+   private boolean isEquality;
    
    /**
     * Creates a new term that compares two expressions
@@ -19,6 +20,14 @@ public class Term {
    public Term(Expression lhs, Expression rhs) {
       this.lhs = lhs;
       this.rhs = rhs;
+      isEquality = true;
+   }
+   
+   public Term(Expression lhs, Expression low, Expression high ){
+	   isEquality = false;
+	   this.low = low;
+	   this.high = high;
+	   this.lhs = lhs;	   
    }
    
    /**
@@ -101,7 +110,12 @@ public class Term {
     * @return true if both expressions apply to the schema
     */
    public boolean appliesTo(Schema sch) {
-      return lhs.appliesTo(sch) && rhs.appliesTo(sch);
+	   if(isEquality){
+		   return lhs.appliesTo(sch) && rhs.appliesTo(sch);
+	   }
+	   else{
+		   return lhs.appliesTo(sch) && low.appliesTo(sch) && high.appliesTo(sch);
+	   }      
    }
    
    /**
@@ -112,12 +126,27 @@ public class Term {
     * @return true if both expressions have the same value in the scan
     */
    public boolean isSatisfied(Scan s) {
-      Constant lhsval = lhs.evaluate(s);
-      Constant rhsval = rhs.evaluate(s);
-      return rhsval.equals(lhsval);
+	  if(isEquality){
+		  Constant lhsval = lhs.evaluate(s);
+	      Constant rhsval = rhs.evaluate(s);
+	      return rhsval.equals(lhsval);  
+	  }
+	  else{
+		  Constant lowval = low.evaluate(s);
+		  Constant highval = high.evaluate(s);
+		  Constant lhsval = lhs.evaluate(s);
+		  return (lhsval.compareTo(highval) <= 0) && (lhsval.compareTo(lowval)>= 0);
+	  }
+      
    }
    
    public String toString() {
-      return lhs.toString() + "=" + rhs.toString();
+	   if(isEquality){
+		   return lhs.toString() + "=" + rhs.toString();   
+	   }
+	   else{
+		   return lhs.toString() + "between" + low.toString() + high.toString(); 
+	   }
+      
    }
 }

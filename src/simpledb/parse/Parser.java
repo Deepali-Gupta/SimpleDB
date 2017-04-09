@@ -23,8 +23,7 @@ public class Parser {
    
    public Constant constant() {
 	  if (lex.matchTimestampConstant()) {
-    	  return new TimestampConstant(lex.eatTimestampConstant());
-         
+    	  return new TimestampConstant(lex.eatTimestampConstant());         
       }
       else if(lex.matchIntConstant())
          return new IntConstant(lex.eatIntConstant());
@@ -44,9 +43,18 @@ public class Parser {
    
    public Term term() {
       Expression lhs = expression();
-      lex.eatDelim('=');
-      Expression rhs = expression();
-      return new Term(lhs, rhs);
+      if(lex.matchKeyword("between")){
+    	  lex.eatKeyword("between");
+    	  Expression low = expression();
+    	  Expression high = expression();
+    	  return new Term(lhs, low, high);
+      }
+      else{
+    	  lex.eatDelim('=');
+          Expression rhs = expression();
+          return new Term(lhs, rhs);
+      }
+      
    }
    
    public Predicate predicate() {
