@@ -1,5 +1,6 @@
 package simpledb.query;
 
+import simpledb.parse.InvalidIntervalError;
 import simpledb.record.Schema;
 
 /**
@@ -134,6 +135,8 @@ public class Term {
 	  else{
 		  Constant lowval = low.evaluate(s);
 		  Constant highval = high.evaluate(s);
+		  if(lowval.compareTo(highval)>0)
+			  throw new InvalidIntervalError();
 		  Constant lhsval = lhs.evaluate(s);
 		  return (lhsval.compareTo(highval) <= 0) && (lhsval.compareTo(lowval)>= 0);
 	  }
