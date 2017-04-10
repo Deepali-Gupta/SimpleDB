@@ -101,7 +101,7 @@ public class BTreeIndex implements Index {
 		BTreeDir root = new BTreeDir(rootblk, dirTi, tx);
 		blknum = root.searchbetween(lowkey, highkey);
 		root.close();
-		System.out.println("position init "+position);
+//		System.out.println("position init "+position);
 		leafblk = new  Block(leafTi.fileName(), blknum.get(position++));
 		leaf = new BTreeLeaf(leafblk, leafTi, lowkey, highkey, tx);
 	}
@@ -118,16 +118,16 @@ public class BTreeIndex implements Index {
 	}
 
 	public boolean nextbetween() {
-		System.out.println("this is it"+leaf.toString());
+//		System.out.println("this is it"+leaf.toString());
 		boolean d = leaf.nextbetween();
-		if(d)
-			System.out.println("d is true!");
+//		if(d)
+//			System.out.println("d is true!");
 		if (d == false) {
-			System.out.println("d is false!"+position);
+//			System.out.println("d is false!"+position);
 			if (position < blknum.size()-1) {
 				leafblk = new  Block(leafTi.fileName(), blknum.get(position++));
 				leaf.close();
-				System.out.println("inside the if");
+//				System.out.println("inside the if");
 				leaf = new BTreeLeaf(leafblk, leafTi, lowkey, highkey, tx);
 				d = leaf.nextbetween();
 			}

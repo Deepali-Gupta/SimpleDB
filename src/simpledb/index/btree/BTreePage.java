@@ -43,7 +43,7 @@ public class BTreePage {
     */
    public int findSlotBefore(Constant searchkey) {
       int slot = 0;
-      System.out.println(searchkey.toString());
+//      System.out.println(searchkey.toString());
 //      System.out.println(getDataVal(slot).toString());
       while (slot < getNumRecs() && getDataVal(slot).compareTo(searchkey) < 0)
          slot++;

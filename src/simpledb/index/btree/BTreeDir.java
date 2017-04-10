@@ -55,9 +55,9 @@ public class BTreeDir {
 	 */
 	public int search(Constant searchkey) {
 		Block childblk = findChildBlock(searchkey);
-		System.out.println("heyy" + contents.getFlag());
+//		System.out.println("heyy" + contents.getFlag());
 		while (contents.getFlag() > 0) {
-			System.out.println("heyy come " + contents.getFlag());
+//			System.out.println("heyy come " + contents.getFlag());
 			contents.close();
 			contents = new BTreePage(childblk, ti, tx);
 			childblk = findChildBlock(searchkey);
@@ -66,13 +66,13 @@ public class BTreeDir {
 	}
 
 	public List<Integer> searchbetween(Constant lowkey, Constant highkey) {
-		System.out.println(lowkey.toString()+" keys "+highkey.toString());
+//		System.out.println(lowkey.toString()+" keys "+highkey.toString());
 		List<Integer> res = new ArrayList<Integer>();
 		BTreePage content1 = contents;
 		Stack<Integer> s = new Stack<Integer>();
 //		inititlization
 		for (int i = 0; i < content1.getNumRecs(); i++) {
-			System.out.println("init vals "+content1.getDataVal(i).toString());
+//			System.out.println("init vals "+content1.getDataVal(i).toString());
 			//if (content1.getDataVal(i).compareTo(lowkey) >= 0 && content1.getDataVal(i).compareTo(highkey) <= 0)
 				s.push(content1.getChildNum(i));
 		}
@@ -85,7 +85,7 @@ public class BTreeDir {
 //			if leaf node
 			if (content1.getFlag() == 0) {
 				for (int i = 0; i < content1.getNumRecs(); i++) {
-					System.out.println("leaf vals "+content1.getDataVal(i).toString());
+//					System.out.println("leaf vals "+content1.getDataVal(i).toString());
 					//if (content1.getDataVal(i).compareTo(lowkey) >= 0 && content1.getDataVal(i).compareTo(highkey) <= 0)
 						res.add(content1.getChildNum(i));
 				}
@@ -93,13 +93,13 @@ public class BTreeDir {
 //			else not a leaf
 			else {
 				for (int i = 0; i < content1.getNumRecs(); i++) {
-					System.out.println("mid vals "+content1.getDataVal(i).toString());
+//					System.out.println("mid vals "+content1.getDataVal(i).toString());
 					//if (content1.getDataVal(i).compareTo(lowkey) >= 0 && content1.getDataVal(i).compareTo(highkey) <= 0)
 						s.push(content1.getChildNum(i));
 				}
 			}
 		}
-		System.out.println("res "+res);
+//		System.out.println("res "+res);
 
 	return res;
 

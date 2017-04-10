@@ -146,7 +146,7 @@ public class Term {
 		  Constant lowval = low.evaluate(s);
 		  Constant highval = high.evaluate(s);
 		  if(lowval.compareTo(highval)>0) {
-			  System.out.println("InvalidIntervalError");
+//			  System.out.println("InvalidIntervalError");
 			  throw new InvalidIntervalError();
 		  }
 		  Constant lhsval = lhs.evaluate(s);
