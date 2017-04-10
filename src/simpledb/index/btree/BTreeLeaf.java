@@ -41,7 +41,8 @@ public class BTreeLeaf {
 	      this.searchkey = lowkey;
 	      this.highkey = highkey;
 	      contents = new BTreePage(blk, ti, tx);
-	      currentslot = contents.findSlotBefore(searchkey);
+//	      currentslot = contents.findSlotBefore(searchkey);
+	      currentslot = 0;
 	   }
    
    /**
@@ -70,12 +71,10 @@ public class BTreeLeaf {
    public boolean nextbetween() {
 	      currentslot++;
 	      if (currentslot >= contents.getNumRecs()) 
-	         return tryOverflow2();
-	      else if (contents.getDataVal(currentslot).compareTo(searchkey)>=0 
-	    		  && contents.getDataVal(currentslot).compareTo(highkey)<=0)
-	         return true;
+	         return false;
 	      else 
-	         return tryOverflow2();
+	         return true;
+	      
 	   }
    
    /**

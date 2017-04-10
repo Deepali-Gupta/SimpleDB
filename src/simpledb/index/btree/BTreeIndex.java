@@ -2,6 +2,10 @@ package simpledb.index.btree;
 
 import static java.sql.Types.INTEGER;
 import static java.sql.Types.VARCHAR;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import simpledb.file.Block;
 import simpledb.tx.Transaction;
 import simpledb.record.*;
@@ -10,165 +14,194 @@ import simpledb.index.Index;
 
 /**
  * A B-tree implementation of the Index interface.
+ * 
  * @author Edward Sciore
  */
 public class BTreeIndex implements Index {
-   private Transaction tx;
-   private TableInfo dirTi, leafTi;
-   private BTreeLeaf leaf = null;
-   private Block rootblk;
+	private Transaction tx;
+	private TableInfo dirTi, leafTi;
+	private BTreeLeaf leaf = null;
+	private Block rootblk;
+	private int position;
+	private Constant lowkey, highkey;
+	private Block leafblk;
+	private List<Integer> blknum;
 
-   /**
-    * Opens a B-tree index for the specified index.
-    * The method determines the appropriate files
-    * for the leaf and directory records,
-    * creating them if they did not exist.
-    * @param idxname the name of the index
-    * @param leafsch the schema of the leaf index records
-    * @param tx the calling transaction
-    */
-   public BTreeIndex(String idxname, Schema leafsch, Transaction tx) {
-      this.tx = tx;
-      // deal with the leaves
-      String leaftbl = idxname + "leaf";
-      leafTi = new TableInfo(leaftbl, leafsch);
-      if (tx.size(leafTi.fileName()) == 0)
-         tx.append(leafTi.fileName(), new BTPageFormatter(leafTi, -1));
+	/**
+	 * Opens a B-tree index for the specified index. The method determines the
+	 * appropriate files for the leaf and directory records, creating them if
+	 * they did not exist.
+	 * 
+	 * @param idxname
+	 *            the name of the index
+	 * @param leafsch
+	 *            the schema of the leaf index records
+	 * @param tx
+	 *            the calling transaction
+	 */
+	public BTreeIndex(String idxname, Schema leafsch, Transaction tx) {
+		this.tx = tx;
+		// deal with the leaves
+		String leaftbl = idxname + "leaf";
+		leafTi = new TableInfo(leaftbl, leafsch);
+		if (tx.size(leafTi.fileName()) == 0)
+			tx.append(leafTi.fileName(), new BTPageFormatter(leafTi, -1));
 
-      // deal with the directory
-      Schema dirsch = new Schema();
-      dirsch.add("block",   leafsch);
-      dirsch.add("dataval", leafsch);
-      String dirtbl = idxname + "dir";
-      dirTi = new TableInfo(dirtbl, dirsch);
-      rootblk = new Block(dirTi.fileName(), 0);
-      if (tx.size(dirTi.fileName()) == 0)
-         // create new root block
-         tx.append(dirTi.fileName(), new BTPageFormatter(dirTi, 0));
-      BTreePage page = new BTreePage(rootblk, dirTi, tx);
-      if (page.getNumRecs() == 0) {
+		// deal with the directory
+		Schema dirsch = new Schema();
+		dirsch.add("block", leafsch);
+		dirsch.add("dataval", leafsch);
+		String dirtbl = idxname + "dir";
+		dirTi = new TableInfo(dirtbl, dirsch);
+		rootblk = new Block(dirTi.fileName(), 0);
+		if (tx.size(dirTi.fileName()) == 0)
+			// create new root block
+			tx.append(dirTi.fileName(), new BTPageFormatter(dirTi, 0));
+		BTreePage page = new BTreePage(rootblk, dirTi, tx);
+		if (page.getNumRecs() == 0) {
 			// insert initial directory entry
-         int fldtype = dirsch.type("dataval");
-         Constant minval;
-         if (fldtype == INTEGER)
-        	minval = new IntConstant(Integer.MIN_VALUE);
-         else if (fldtype == VARCHAR)
-        	minval = new StringConstant("");
-         else
-            minval = new TimestampConstant("1970-01-01 00:00:00");
-            //TODO
-         page.insertDir(0, minval, 0);
+			int fldtype = dirsch.type("dataval");
+			Constant minval;
+			if (fldtype == INTEGER)
+				minval = new IntConstant(Integer.MIN_VALUE);
+			else if (fldtype == VARCHAR)
+				minval = new StringConstant("");
+			else
+				minval = new TimestampConstant("1970-01-01 00:00:00");
+			// TODO
+			page.insertDir(0, minval, 0);
 		}
-      page.close();
-   }
+		page.close();
+		position = 0;
+	}
 
-   /**
-    * Traverses the directory to find the leaf block corresponding
-    * to the specified search key.
-    * The method then opens a page for that leaf block, and
-    * positions the page before the first record (if any)
-    * having that search key.
-    * The leaf page is kept open, for use by the methods next
-    * and getDataRid.
-    * @see simpledb.index.Index#beforeFirst(simpledb.query.Constant)
-    */
-   //TODO
-   public void beforeFirst(Constant searchkey) {
-      close();
-      BTreeDir root = new BTreeDir(rootblk, dirTi, tx);
-      int blknum = root.search(searchkey);
-      root.close();
-      Block leafblk = new Block(leafTi.fileName(), blknum);
-      leaf = new BTreeLeaf(leafblk, leafTi, searchkey, tx);
-   }
-   
-   public void beforeFirst(Constant lowkey, Constant highkey) {
-	      close();
-	      BTreeDir root = new BTreeDir(rootblk, dirTi, tx);
-	      int blknum = root.search(lowkey);
-	      root.close();
-	      Block leafblk = new Block(leafTi.fileName(), blknum);
-	      leaf = new BTreeLeaf(leafblk, leafTi, lowkey, highkey, tx);
-	   }
+	/**
+	 * Traverses the directory to find the leaf block corresponding to the
+	 * specified search key. The method then opens a page for that leaf block,
+	 * and positions the page before the first record (if any) having that
+	 * search key. The leaf page is kept open, for use by the methods next and
+	 * getDataRid.
+	 * 
+	 * @see simpledb.index.Index#beforeFirst(simpledb.query.Constant)
+	 */
+	// TODO
+	public void beforeFirst(Constant searchkey) {
+		close();
+		BTreeDir root = new BTreeDir(rootblk, dirTi, tx);
+		int blknum = root.search(searchkey);
+		root.close();
+		Block leafblk = new Block(leafTi.fileName(), blknum);
+		leaf = new BTreeLeaf(leafblk, leafTi, searchkey, tx);
+	}
 
-   /**
-    * Moves to the next leaf record having the
-    * previously-specified search key.
-    * Returns false if there are no more such leaf records.
-    * @see simpledb.index.Index#next()
-    */
-   public boolean next() {
-      return leaf.next();
-   }
-   
-   public boolean nextbetween() {
-	      return leaf.nextbetween();
-   }
+	public void beforeFirst(Constant lowkey1, Constant highkey1) {
+		lowkey = lowkey1;
+		highkey = highkey1;
+		close();
+		BTreeDir root = new BTreeDir(rootblk, dirTi, tx);
+		blknum = root.searchbetween(lowkey, highkey);
+		root.close();
+		System.out.println("position init "+position);
+		leafblk = new  Block(leafTi.fileName(), blknum.get(position++));
+		leaf = new BTreeLeaf(leafblk, leafTi, lowkey, highkey, tx);
+	}
 
-   /**
-    * Returns the dataRID value from the current leaf record.
-    * @see simpledb.index.Index#getDataRid()
-    */
-   public RID getDataRid() {
-      return leaf.getDataRid();
-   }
+	/**
+	 * Moves to the next leaf record having the previously-specified search key.
+	 * Returns false if there are no more such leaf records.
+	 * 
+	 * @see simpledb.index.Index#next()
+	 */
+	public boolean next() {
+		boolean d = leaf.next();
+		return d;
+	}
 
-   /**
-    * Inserts the specified record into the index.
-    * The method first traverses the directory to find
-    * the appropriate leaf page; then it inserts
-    * the record into the leaf.
-    * If the insertion causes the leaf to split, then
-    * the method calls insert on the root,
-    * passing it the directory entry of the new leaf page.
-    * If the root node splits, then makeNewRoot is called.
-    * @see simpledb.index.Index#insert(simpledb.query.Constant, simpledb.record.RID)
-    */
-   public void insert(Constant dataval, RID datarid) {
-      beforeFirst(dataval);
-      DirEntry e = leaf.insert(datarid);
-      leaf.close();
-      if (e == null)
-         return;
-      BTreeDir root = new BTreeDir(rootblk, dirTi, tx);
-      DirEntry e2 = root.insert(e);
-      if (e2 != null)
-         root.makeNewRoot(e2);
-      root.close();
-   }
+	public boolean nextbetween() {
+		System.out.println("this is it"+leaf.toString());
+		boolean d = leaf.nextbetween();
+		if(d)
+			System.out.println("d is true!");
+		if (d == false) {
+			System.out.println("d is false!"+position);
+			if (position < blknum.size()-1) {
+				leafblk = new  Block(leafTi.fileName(), blknum.get(position++));
+				leaf.close();
+				System.out.println("inside the if");
+				leaf = new BTreeLeaf(leafblk, leafTi, lowkey, highkey, tx);
+				d = leaf.nextbetween();
+			}
+		}
+		return d;
+	}
 
-   /**
-    * Deletes the specified index record.
-    * The method first traverses the directory to find
-    * the leaf page containing that record; then it
-    * deletes the record from the page.
-    * @see simpledb.index.Index#delete(simpledb.query.Constant, simpledb.record.RID)
-    */
-   public void delete(Constant dataval, RID datarid) {
-      beforeFirst(dataval);
-      leaf.delete(datarid);
-      leaf.close();
-   }
+	/**
+	 * Returns the dataRID value from the current leaf record.
+	 * 
+	 * @see simpledb.index.Index#getDataRid()
+	 */
+	public RID getDataRid() {
+		return leaf.getDataRid();
+	}
 
-   /**
-    * Closes the index by closing its open leaf page,
-    * if necessary.
-    * @see simpledb.index.Index#close()
-    */
-   public void close() {
-      if (leaf != null)
-         leaf.close();
-   }
+	/**
+	 * Inserts the specified record into the index. The method first traverses
+	 * the directory to find the appropriate leaf page; then it inserts the
+	 * record into the leaf. If the insertion causes the leaf to split, then the
+	 * method calls insert on the root, passing it the directory entry of the
+	 * new leaf page. If the root node splits, then makeNewRoot is called.
+	 * 
+	 * @see simpledb.index.Index#insert(simpledb.query.Constant,
+	 *      simpledb.record.RID)
+	 */
+	public void insert(Constant dataval, RID datarid) {
+		beforeFirst(dataval);
+		DirEntry e = leaf.insert(datarid);
+		leaf.close();
+		if (e == null)
+			return;
+		BTreeDir root = new BTreeDir(rootblk, dirTi, tx);
+		DirEntry e2 = root.insert(e);
+		if (e2 != null)
+			root.makeNewRoot(e2);
+		root.close();
+	}
 
-   /**
-    * Estimates the number of block accesses
-    * required to find all index records having
-    * a particular search key.
-    * @param numblocks the number of blocks in the B-tree directory
-    * @param rpb the number of index entries per block
-    * @return the estimated traversal cost
-    */
-   public static int searchCost(int numblocks, int rpb) {
-      return 1 + (int)(Math.log(numblocks) / Math.log(rpb));
-   }
+	/**
+	 * Deletes the specified index record. The method first traverses the
+	 * directory to find the leaf page containing that record; then it deletes
+	 * the record from the page.
+	 * 
+	 * @see simpledb.index.Index#delete(simpledb.query.Constant,
+	 *      simpledb.record.RID)
+	 */
+	public void delete(Constant dataval, RID datarid) {
+		beforeFirst(dataval);
+		leaf.delete(datarid);
+		leaf.close();
+	}
+
+	/**
+	 * Closes the index by closing its open leaf page, if necessary.
+	 * 
+	 * @see simpledb.index.Index#close()
+	 */
+	public void close() {
+		if (leaf != null)
+			leaf.close();
+	}
+
+	/**
+	 * Estimates the number of block accesses required to find all index records
+	 * having a particular search key.
+	 * 
+	 * @param numblocks
+	 *            the number of blocks in the B-tree directory
+	 * @param rpb
+	 *            the number of index entries per block
+	 * @return the estimated traversal cost
+	 */
+	public static int searchCost(int numblocks, int rpb) {
+		return 1 + (int) (Math.log(numblocks) / Math.log(rpb));
+	}
 }

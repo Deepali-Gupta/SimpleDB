@@ -140,13 +140,11 @@ public class Term {
 	  if(isEquality){
 		  Constant lhsval = lhs.evaluate(s);
 	      Constant rhsval = rhs.evaluate(s);
-	      System.out.println("this shouldn't be here " );
 	      return rhsval.equals(lhsval);  
 	  }
 	  else{
 		  Constant lowval = low.evaluate(s);
 		  Constant highval = high.evaluate(s);
-		  System.out.println("here is it "+lowval.compareTo(highval));
 		  if(lowval.compareTo(highval)>0) {
 			  System.out.println("InvalidIntervalError");
 			  throw new InvalidIntervalError();
