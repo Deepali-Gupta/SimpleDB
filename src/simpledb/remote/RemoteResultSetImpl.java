@@ -61,7 +61,7 @@ class RemoteResultSetImpl extends UnicastRemoteObject implements RemoteResultSet
    }
    
    //TODO
-   public Date getTimestampP2(String fldname) throws RemoteException {
+   public Date getDate(String fldname) throws RemoteException {
 		try {
 	      fldname = fldname.toLowerCase(); // to ensure case-insensitivity
 	      return new Date(s.getLong(fldname));

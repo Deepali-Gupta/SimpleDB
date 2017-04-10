@@ -1,5 +1,6 @@
 package simpledb.remote;
 
+import java.sql.Date;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.*;
@@ -36,9 +37,9 @@ public class SimpleResultSet extends ResultSetAdapter {
    }
    
    //TODO
-   public Date getTimestampP2(String fldname) throws SQLException {
+   public java.sql.Date getDate(String fldname) throws SQLException {
 	      try {
-	         return rrs.getTimestampP2(fldname);
+	         return (Date) rrs.getDate(fldname);
 	      }
 	      catch (Exception e) {
 	         throw new SQLException(e);

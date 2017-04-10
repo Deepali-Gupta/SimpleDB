@@ -136,22 +136,24 @@ public class Term {
     * @return true if both expressions have the same value in the scan
     */
    public boolean isSatisfied(Scan s) {
+//	   throw new InvalidIntervalError();
 	  if(isEquality){
 		  Constant lhsval = lhs.evaluate(s);
 	      Constant rhsval = rhs.evaluate(s);
+	      System.out.println("this shouldn't be here " );
 	      return rhsval.equals(lhsval);  
 	  }
 	  else{
 		  Constant lowval = low.evaluate(s);
 		  Constant highval = high.evaluate(s);
+		  System.out.println("here is it "+lowval.compareTo(highval));
 		  if(lowval.compareTo(highval)>0) {
 			  System.out.println("InvalidIntervalError");
 			  throw new InvalidIntervalError();
 		  }
 		  Constant lhsval = lhs.evaluate(s);
 		  return (lhsval.compareTo(highval) <= 0) && (lhsval.compareTo(lowval)>= 0);
-	  }
-      
+	  }      
    }
    
    public String toString() {

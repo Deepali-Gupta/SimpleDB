@@ -1,6 +1,7 @@
 package simpledb.index.btree;
 
 import simpledb.file.Block;
+import simpledb.parse.InvalidIntervalError;
 import simpledb.tx.Transaction;
 import simpledb.record.*;
 import simpledb.query.Constant;
